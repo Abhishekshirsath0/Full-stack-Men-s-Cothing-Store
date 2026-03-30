@@ -1,93 +1,110 @@
-import { Link } from "react-router";
+import React from "react";
+
 const Login = () => {
   return (
-    <>
-   <div class="text-center py-6 ">
-  <h2 class="text-3xl font-semibold text-slate-700">
-    Welcome to Login
-  </h2>
-</div>
+    <div className="flex min-h-screen items-center justify-center bg-gray-50 px-4">
+      <div className="w-full max-w-md rounded-lg border border-gray-200 bg-white p-8 shadow-sm">
+        <h1 className="mb-4 text-xl font-semibold text-gray-800">
+          Sign in to your account
+        </h1>
 
-    <div className="flex justify-center items-center min-h-screen bg-gray-50">
-      <div className="w-full max-w-sm bg-white p-6 border border-gray-200 rounded-lg shadow-md">
        
-        <form action="#">
 
-          
-          <h5 className="text-xl font-semibold text-gray-900 mb-6">
-            Sign in to our platform
-          </h5>
-
-          <div className="mb-4">
+        <form className="mt-6 space-y-4">
+          <div>
             <label
               htmlFor="email"
-              className="block mb-2 text-sm font-medium text-gray-900"
+              className="mb-1 block text-sm font-medium text-gray-700"
             >
-              Your email
+              Email address
             </label>
             <input
-              type="email"
               id="email"
-              className="bg-gray-100 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full px-3 py-2.5"
-              placeholder="example@company.com"
-              required
+              type="email"
+              placeholder="Email address"
+              className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
             />
           </div>
 
-          <div className="mb-4">
+          <div>
             <label
               htmlFor="password"
-              className="block mb-2 text-sm font-medium text-gray-900"
+              className="mb-1 block text-sm font-medium text-gray-700"
             >
-              Your password
+              Password
             </label>
             <input
-              type="password"
               id="password"
-              className="bg-gray-100 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full px-3 py-2.5"
-              placeholder="•••••••••"
-              required
+              type="password"
+              placeholder="Password"
+              className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
             />
           </div>
 
-          <div className="flex items-center justify-between mb-6">
-            <div className="flex items-center">
-              <input
-                id="checkbox-remember"
-                type="checkbox"
-                className="w-4 h-4 border border-gray-300 rounded focus:ring-2 focus:ring-blue-500"
-              />
-              <label
-                htmlFor="checkbox-remember"
-                className="ml-2 text-sm text-gray-900"
-              >
-                Remember me
-              </label>
-            </div>
-            <Link to="/"
-              className="text-sm text-blue-600 hover:underline"
+          <div className="flex items-center">
+            <input
+              id="remember-me"
+              type="checkbox"
+              className="h-4 w-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+            />
+            <label
+              htmlFor="remember-me"
+              className="ml-2 block text-sm text-gray-700"
             >
-              Lost Password?
-            </Link>
+              Remember me
+            </label>
+          </div>
+
+          <div className="text-sm">
+            <a
+              href="#"
+              className="font-medium text-blue-600 hover:text-blue-500"
+            >
+              Forgot password?
+            </a>
           </div>
 
           <button
             type="submit"
-            className="w-full text-white bg-blue-600 hover:bg-blue-700 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2.5 mb-3"
+            className="w-full rounded-md bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
           >
-            Login to your account
+            Sign in
           </button>
 
-          <div className="text-sm text-gray-900">
-            Not registered?{" "}
-            <a href="#" className="text-blue-600 hover:underline">
-              Create account
-            </a>
+          <div className="mt-4 text-center text-sm text-gray-600">
+            Or continue with
+          </div>
+
+          <div className="flex justify-center gap-4 mt-2">
+            {/* Google Button */}
+            <button
+              type="button"
+              className="flex items-center gap-2 rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-100"
+            >
+              <img
+                src="/Google.png"
+                alt="Google"
+                className="h-5 w-5"
+              />
+              Google
+            </button>
+
+            {/* GitHub Button */}
+            <button
+              type="button"
+              className="flex items-center gap-2 rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-100"
+            >
+              <img
+                src="/Github.png"
+                alt="GitHub"
+                className="h-5 w-5"
+              />
+              GitHub
+            </button>
           </div>
         </form>
       </div>
     </div>
-    </>
   );
 };
 

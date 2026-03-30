@@ -1,4 +1,5 @@
 import { Link } from "react-router";
+import Navbar from "./navbar";
 const MyCart = () => {
   const cartItems = [
     { id: 1, name: "Velvet Sneaker", size: "MD", price: 20, qty: 2, img: "https://readymadeui.com/images/product14.webp" },
@@ -13,6 +14,8 @@ const MyCart = () => {
   const total = subtotal + shipping + tax;
 
   return (
+    <>
+    <Navbar/>
     <div className="max-w-5xl max-lg:max-w-2xl mx-auto bg-white p-4">
       <div className="border-b border-gray-300 pb-4">
         <h2 className="text-slate-900 text-2xl font-semibold">Shopping Cart</h2>
@@ -87,6 +90,7 @@ const MyCart = () => {
         </div>
       </div>
     </div>
+    </>
   )
 }
 

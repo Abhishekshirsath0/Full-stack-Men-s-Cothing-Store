@@ -74,7 +74,7 @@ const Navbar = () => {
                 <Link to="/home/about-us" className="block px-3 py-2 hover:bg-gray-300">About</Link>
                 <Link to="/home/contact-us" className="block px-3 py-2 hover:bg-gray-300">Contact</Link>
                
-                <Link to="/home/settings" className="block px-3 py-2 hover:bg-gray-300">Settings</Link>
+                <Link to="settings" className="block px-3 py-2 hover:bg-gray-300">Settings</Link>
               </div>
             )}
           </div>

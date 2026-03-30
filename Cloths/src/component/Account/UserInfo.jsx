@@ -37,6 +37,33 @@ const UserInfo = () => {
             </div>
           </div>
 
+          {/* Gender */}
+          <div>
+            <label className="text-sm text-gray-500">Gender</label>
+            <div className="flex items-center justify-between p-3 rounded-lg mt-1 border border-gray-200">
+              {/* Radio input */}
+              <div className="flex items-center space-x-2">
+                <input
+                  type="radio"
+                  name="gender"
+                  id="gender_male"
+                  value="Male"
+                />
+                <label htmlFor="gender_Female">Male</label>
+                <input
+                  type="radio"
+                  name="gender"
+                  id="gender_Female"
+                  value="Female"
+                />
+                <label htmlFor="gender_Female">Female</label>
+              </div>
+
+              {/* Edit button */}
+              <button className="text-blue-600 text-sm">Edit</button>
+            </div>
+          </div>
+
           {/* Email */}
           <div>
             <label className="text-sm text-gray-500">Email</label>

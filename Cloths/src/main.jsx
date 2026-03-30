@@ -4,14 +4,16 @@ import "./index.css";
 import App from "./App.jsx";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import FilterSidebar from "./component/CategoryFilter";
-import Login from "./component/login.jsx";
+import Login from "./component/Login.jsx";
 import MyCart from "./component/MyCart.jsx";
 import About from "./component/About.jsx";
 import Contact from "./component/contact.jsx";
-import Settings from "./component/settings.jsx";
-import Account from "./component/Account.jsx";
-import UserInfo from "./component/UserInfo.jsx"; // <-- import UserInfo
-import OrderPage from "./component/Order.jsx";
+import Settings from "./component/Account/settings.jsx";
+import Account from "./component/Account/Account.jsx";
+import UserInfo from "./component/Account/UserInfo.jsx"; // <-- import UserInfo
+import OrderPage from "./component/Account/Order.jsx";
+import ManageAddress from "./component/Account/ManageAdd.jsx";
+import Payment from "./component/Account/Payment.jsx";
 
 const router = createBrowserRouter([
   { path: "/", element: <App /> },
@@ -20,7 +22,7 @@ const router = createBrowserRouter([
   { path: "/login", element: <Login /> },
   { path: "/home/about-us", element: <About /> },
   { path: "/home/contact-us", element: <Contact /> },
-  { path: "/home/settings", element: <Settings /> },
+   { path: "settings", element: <Settings /> },
 
   {
     path: "/account",
@@ -28,6 +30,9 @@ const router = createBrowserRouter([
     children: [
       { index: true, element: <UserInfo /> }, // <-- shows at /account
       { path: "orders", element: <OrderPage /> }, // <-- shows at /account/orders
+      { path: "address", element: <ManageAddress /> },
+      { path: "payment", element: <Payment /> },
+      { path: "settings", element: <Settings /> },
     ],
   },
 ]);
@@ -35,5 +40,5 @@ const router = createBrowserRouter([
 createRoot(document.getElementById("root")).render(
   <StrictMode>
     <RouterProvider router={router} />
-  </StrictMode>
+  </StrictMode>,
 );
