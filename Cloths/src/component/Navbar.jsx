@@ -26,7 +26,7 @@ const Navbar = () => {
         <div className="hidden md:flex items-center gap-6 w-full ml-6">
             <Link to ="/"> < button 
             
-            className="p-2 border rounded hover:bg-gray-100"
+            className="p-2 border rounded  hover:bg-gray-950 hover:text-amber-50"  
           >
             Home
           </button></Link>
