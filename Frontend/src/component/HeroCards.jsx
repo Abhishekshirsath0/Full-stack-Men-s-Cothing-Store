@@ -93,7 +93,7 @@ const Card = () => {
       <Section title="🔥 T-Shirts" category="tshirt" products={products} loading={loading} />
       <Section title="👔 Shirts" category="shirts" products={products} loading={loading} />
       <Section title="👖 Jeans" category="jeans" products={products} loading={loading} />
-      <Section title="🛌 Night Pants" category="nightpants" products={products} loading={loading} />
+      <Section title="🛌 Sleepwear" category="nightpants" products={products} loading={loading} />
 
     </div>
   );
