@@ -38,6 +38,9 @@ const ManageProducts = () => {
 
   // ================= DELETE PRODUCT =================
   const handleDelete = async (id, name) => {
+    const confirmDelete = window.confirm("Are you sure to delete?");
+    if (!confirmDelete) return;
+
     try {
       const success = await DeleteProductFromSErver(id);
 
@@ -48,6 +51,7 @@ const ManageProducts = () => {
         toast.error("Delete failed ❌");
       }
     } catch (error) {
+      console.error(error);
       toast.error("Something went wrong ❌");
     }
   };
@@ -83,7 +87,7 @@ const ManageProducts = () => {
     return acc;
   }, {});
 
-  // ✅ SORT DATES (LATEST FIRST)
+  // SORT DATES (LATEST FIRST)
   const sortedDates = Object.keys(groupedByDate).sort(
     (a, b) => new Date(b) - new Date(a)
   );
@@ -125,14 +129,11 @@ const ManageProducts = () => {
                     key={product._id}
                     className="bg-white rounded-2xl shadow-lg overflow-hidden"
                   >
-                    {/* IMAGE */}
+                    {/* IMAGE ✅ fixed */}
                     <img
-                      // src={
-                      //   product.image ||
-                      //   "https://via.placeholder.com/300"
-                      // }
+                      src={product.Images?.[0] || "https://placehold.co/300x200?text=No+Image"}
+                      alt={product.ProductName}
                       className="w-full h-48 object-cover"
-                      alt="product"
                     />
 
                     <div className="p-4 space-y-2">
@@ -162,14 +163,10 @@ const ManageProducts = () => {
 
                         {product.Description?.length > 60 && (
                           <span
-                            onClick={() =>
-                              toggleDescription(product._id)
-                            }
+                            onClick={() => toggleDescription(product._id)}
                             className="text-blue-500 cursor-pointer ml-1"
                           >
-                            {expanded[product._id]
-                              ? " Show less"
-                              : "...Read more"}
+                            {expanded[product._id] ? " Show less" : "...Read more"}
                           </span>
                         )}
                       </p>
@@ -188,12 +185,7 @@ const ManageProducts = () => {
                         </button>
 
                         <button
-                          onClick={() =>
-                            handleDelete(
-                              product._id,
-                              product.ProductName
-                            )
-                          }
+                          onClick={() => handleDelete(product._id, product.ProductName)}
                           className="flex-1 bg-red-500 text-white py-2 rounded-lg"
                         >
                           Delete

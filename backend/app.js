@@ -1,24 +1,41 @@
 import express from "express";
 import cors from "cors";
 import mongoose from "mongoose";
-import userRouter from "./Router/userRouter.js"
+import userRouter from "./Router/userRouter.js";
 import ItemsRouter from "./Router/itemsRouter.js";
+import ImageRouter from "./Router/imageRouter.js"; // 👈 added
+import dotenv from "dotenv";
+import { v2 as cloudinary } from "cloudinary";
+import fs from "fs";
+
+dotenv.config();
+
+const PORT = process.env.PORT || 5000;
 const app = express();
-const PORT = 8000;
-const pathDB =
-"mongodb+srv://shirsathabhi512:shirsathabhi512@cluster0.x7v8wyq.mongodb.net/BigDream?retryWrites=true&w=majority";
+
+cloudinary.config({
+  cloud_name: process.env.cloud_name,
+  api_key: process.env.api_key,
+  api_secret: process.env.api_secret,
+  secure: true,
+});
+
+// 👇 create uploads folder if it doesn't exist
+if (!fs.existsSync("uploads")) fs.mkdirSync("uploads");
+
+const pathDB = process.env.mongoURI;
+
 app.use(express.json());
-app.use(express.urlencoded({extended: true}));
-app.use(cors({
-  origin:"http://localhost:5173",
+app.use(express.urlencoded({ extended: true }));
+app.use(cors({ origin: "http://localhost:5173" }));
 
-}));
-app.use("/api/user" , userRouter)
-app.use("/api/items" , ItemsRouter)
-mongoose.connect(pathDB).then( ()=>{
-    console.log("connected to mongoDB");
-    app.listen(PORT, () => {
-        console.log(`The server is running on ${PORT} `);
-      });
-})
+app.use("/api/user", userRouter);
+app.use("/api/items", ItemsRouter);
+app.use("/images", ImageRouter); // 👈 added
 
+mongoose.connect(pathDB).then(() => {
+  console.log("connected to mongoDB");
+  app.listen(PORT, () => {
+    console.log(`The server is running on ${PORT}`);
+  });
+});

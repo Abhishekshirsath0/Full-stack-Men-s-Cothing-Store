@@ -27,12 +27,13 @@ const ProductSchema = new Schema({
     required: [true, "Description is required"],
   },
   Size: {
-    type: [String], 
+    type: [String],
     enum: ["S", "M", "L", "XL", "30", "32", "34", "36"],
   },
+  Images: [String], // 👈 added
 },
- {
-   timestamps: true
- });
+{
+  timestamps: true,
+});
 
 export default mongoose.model("Product", ProductSchema);
