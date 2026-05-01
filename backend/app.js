@@ -3,7 +3,7 @@ import cors from "cors";
 import mongoose from "mongoose";
 import userRouter from "./Router/userRouter.js";
 import ItemsRouter from "./Router/itemsRouter.js";
-import ImageRouter from "./Router/imageRouter.js"; // 👈 added
+import ImageRouter from "./Router/imageRouter.js";  
 import dotenv from "dotenv";
 import { v2 as cloudinary } from "cloudinary";
 import fs from "fs";
@@ -20,7 +20,7 @@ cloudinary.config({
   secure: true,
 });
 
-// 👇 create uploads folder if it doesn't exist
+
 if (!fs.existsSync("uploads")) fs.mkdirSync("uploads");
 
 const pathDB = process.env.mongoURI;
@@ -31,7 +31,7 @@ app.use(cors({ origin: "http://localhost:5173" }));
 
 app.use("/api/user", userRouter);
 app.use("/api/items", ItemsRouter);
-app.use("/images", ImageRouter); // 👈 added
+app.use("/images", ImageRouter); 
 
 mongoose.connect(pathDB).then(() => {
   console.log("connected to mongoDB");

@@ -1,15 +1,15 @@
 import { v2 as cloudinary } from "cloudinary";
 import fs from "fs";
 
-const uploadOnCloudinary = async (localFilePath) => {
+const uploadOnCloudinary = async (localFilePath ) => {
   try {
-    const result = await cloudinary.uploader.upload(localFilePath, {
+    const result = await cloudinary.uploader.upload(localFilePath, {  
       resource_type: "image",
     });
     fs.unlinkSync(localFilePath); // delete local file after upload
-    return result;
+    return result; // this contains the URL and other info about the uploaded image
   } catch (error) {
-    fs.unlinkSync(localFilePath); // delete even on failure
+    fs.unlinkSync(localFilePath);  // delete even on failure
     throw error;
   }
 };

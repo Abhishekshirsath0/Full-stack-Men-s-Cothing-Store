@@ -194,7 +194,7 @@ const AddProduct = () => {
           {/* SUBMIT */}
           <button type="submit" disabled={uploading}
             className="w-full bg-black text-white py-3 rounded-xl hover:bg-gray-800 disabled:opacity-50 disabled:cursor-not-allowed">
-            {uploading ? "⏳ Uploading..." : isEdit ? "Update Product" : "Add Product"}
+            {uploading ? "Uploading..." : isEdit ? "Update Product" : "Add Product"}
           </button>
 
         </form>
