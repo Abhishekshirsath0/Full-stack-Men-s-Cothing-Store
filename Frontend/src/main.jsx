@@ -1,26 +1,32 @@
-import { StrictMode } from "react";
+import { StrictMode, lazy, Suspense } from "react";
 import { createRoot } from "react-dom/client";
 import "./index.css";
-import App from "./App.jsx";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
-import FilterSidebar from "./component/CategoryFilter";
-import Login from "./component/Login.jsx";
-import MyCart from "./component/MyCart.jsx";
-import About from "./component/About.jsx";
-import Contact from "./component/contact.jsx";
-import Settings from "./component/Account/settings.jsx";
-import Account from "./component/Account/Account.jsx";
-import UserInfo from "./component/Account/UserInfo.jsx"; // <-- import UserInfo
-import OrderPage from "./component/Account/Order.jsx";
-import ManageAddress from "./component/Account/ManageAdd.jsx";
-import Payment from "./component/Account/Payment.jsx";
-import Dashboard from "./component/DashBoard/Dashboard.jsx";
-import AddProduct from "./component/DashBoard/AddProduct.jsx";
-import ManageUsers from "./component/DashBoard/ManageUsers.jsx";
-import ManageOrders from "./component/DashBoard/ManageOrders.jsx";
-import Register from "./component/Redister.jsx";
-import ManageProducts from "./component/DashBoard/ManageProducts.jsx";
 import { Toaster } from "react-hot-toast";
+
+// ✅ Lazy imports
+const App = lazy(() => import("./App.jsx"));
+const FilterSidebar = lazy(() => import("./component/CategoryFilter"));
+const Login = lazy(() => import("./component/Login.jsx"));
+const MyCart = lazy(() => import("./component/MyCart.jsx"));
+const About = lazy(() => import("./component/About.jsx"));
+const Contact = lazy(() => import("./component/contact.jsx"));
+const Settings = lazy(() => import("./component/Account/settings.jsx"));
+const Account = lazy(() => import("./component/Account/Account.jsx"));
+const UserInfo = lazy(() => import("./component/Account/UserInfo.jsx"));
+const OrderPage = lazy(() => import("./component/Account/Order.jsx"));
+const ManageAddress = lazy(() => import("./component/Account/ManageAdd.jsx"));
+const Payment = lazy(() => import("./component/Account/Payment.jsx"));
+
+const Dashboard = lazy(() => import("./component/DashBoard/Dashboard.jsx"));
+const AddProduct = lazy(() => import("./component/DashBoard/AddProduct.jsx"));
+const ManageUsers = lazy(() => import("./component/DashBoard/ManageUsers.jsx"));
+const ManageOrders = lazy(() => import("./component/DashBoard/ManageOrders.jsx"));
+const ManageProducts = lazy(() => import("./component/DashBoard/ManageProducts.jsx"));
+
+const Register = lazy(() => import("./component/Redister.jsx"));
+
+// ✅ Router config
 const router = createBrowserRouter([
   { path: "/", element: <App /> },
   { path: "/home/categories", element: <FilterSidebar /> },
@@ -29,19 +35,19 @@ const router = createBrowserRouter([
   { path: "/register", element: <Register /> },
   { path: "/home/about-us", element: <About /> },
   { path: "/home/contact-us", element: <Contact /> },
-  { path: "settings", element: <Settings /> },
 
   {
     path: "/account",
     element: <Account />,
     children: [
-      { index: true, element: <UserInfo /> }, // <-- shows at /account
-      { path: "orders", element: <OrderPage /> }, // <-- shows at /account/orders
+      { index: true, element: <UserInfo /> },
+      { path: "orders", element: <OrderPage /> },
       { path: "address", element: <ManageAddress /> },
       { path: "payment", element: <Payment /> },
       { path: "settings", element: <Settings /> },
     ],
   },
+
   {
     path: "/dashboard",
     element: <Dashboard />,
@@ -51,21 +57,24 @@ const router = createBrowserRouter([
       { path: "add-product", element: <AddProduct /> },
       { path: "manage-order", element: <ManageOrders /> },
       { path: "manage-products", element: <ManageProducts /> },
-      { path: "/dashboard/edit-product", element: <AddProduct /> },
+      { path: "edit-product", element: <AddProduct /> }, // ✅ fixed path
     ],
   },
 ]);
 
+// ✅ Render with Suspense
 createRoot(document.getElementById("root")).render(
   <StrictMode>
-    <Toaster
-      position="bottom-right"
-      toastOptions={{
-        style: {
-          zIndex: 9999,
-        },
-      }}
-    />
-    <RouterProvider router={router} />
-  </StrictMode>,
+    <Toaster position="bottom-right" />
+
+    <Suspense
+      fallback={
+        <h1 className="text-center mt-10 text-lg font-semibold">
+          Loading...
+        </h1>
+      }
+    >
+      <RouterProvider router={router} />
+    </Suspense>
+  </StrictMode>
 );

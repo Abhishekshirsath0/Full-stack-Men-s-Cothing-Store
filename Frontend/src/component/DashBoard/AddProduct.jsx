@@ -70,46 +70,58 @@ const AddProduct = () => {
   };
 
   // ================= SUBMIT =================
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+const handleSubmit = async (e) => {
+  e.preventDefault();
 
-    try {
-      setUploading(true);
+  try {
+    setUploading(true);
 
-      // 1️⃣ upload images → get cloudinary URLs
-      const imageUrls = imageFiles.length > 0
+    // 1️⃣ Upload images
+    const imageUrls =
+      imageFiles.length > 0
         ? await UploadImagesToServer(imageFiles)
         : editProduct?.Images || [];
 
-      // 2️⃣ build product object with image URLs
-      const productData = {
-        ProductName: ProductName.current.value,
-        Brand: Brand.current.value,
-        Price: Price.current.value,
-        Discount: Discount.current.value,
-        Category: Category.current.value,
-        Description: Description.current.value,
-        Size: form.sizes,
-        Images: imageUrls,
-      };
+    // 2️⃣ Create product object
+    const productData = {
+      ProductName: ProductName.current.value,
+      Brand: Brand.current.value,
+      Price: Price.current.value,
+      Discount: Discount.current.value,
+      Category: Category.current.value,
+      Description: Description.current.value,
+      Size: form.sizes,
+      Images: imageUrls, // ✅ FIXED
+    };
 
-      // 3️⃣ save product
-      if (isEdit) {
-        await UpdateProductToServer(editProduct._id, productData);
-        alert("Product Updated Successfully");
-      } else {
-        await AddProductToServer(productData);
-        alert("Product Added Successfully");
-      }
-
-      navigate(-1);
-    } catch (err) {
-      alert("Something went wrong. Please try again.");
-      console.error(err);
-    } finally {
-      setUploading(false);
+    // 3️⃣ Save
+    if (isEdit) {
+      await UpdateProductToServer(editProduct._id, productData);
+      alert("Product Updated Successfully");
+    } else {
+      await AddProductToServer(productData);
+      alert("Product Added Successfully");
     }
-  };
+
+    // 4️⃣ Reset form
+    ProductName.current.value = "";
+    Brand.current.value = "";
+    Price.current.value = "";
+    Discount.current.value = "";
+    Category.current.value = "";
+    Description.current.value = "";
+
+    setForm({ sizes: [] }); // ✅ FIXED
+    setImageFiles([]); // ✅ FIXED
+    setImagePreviews([]); // ✅ FIXED
+
+  } catch (err) {
+    alert("Something went wrong. Please try again.");
+    console.error(err);
+  } finally {
+    setUploading(false);
+  }
+};
 
   return (
     <div className="min-h-screen flex items-center justify-center px-4 py-10">

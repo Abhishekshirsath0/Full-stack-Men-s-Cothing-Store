@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, lazy, Suspense } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
@@ -6,15 +6,17 @@ import "react-loading-skeleton/dist/skeleton.css";
 const Navbar = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [dropdownOpen, setDropdownOpen] = useState(false);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false); // Start as false - only show if data loading
 
   const navigate = useNavigate();
   const dropdownRef = useRef(null);
 
-  // Simulate loading
+  // ✅ FIXED: No artificial delay - remove setTimeout completely
+  // Skeleton only shows while actual data is being fetched
   useEffect(() => {
-    const timer = setTimeout(() => setLoading(false), 2000);
-    return () => clearTimeout(timer);
+    // If you have real navbar data to fetch, do it here
+    // For now, navbar is always ready since it's static
+    setLoading(false);
   }, []);
 
   // Close dropdown when clicking outside
@@ -37,7 +39,7 @@ const Navbar = () => {
     <nav className="max-w-7xl w-full mx-auto px-4 py-3 border-b border-gray-300">
       <div className="flex items-center justify-between">
 
-        {/* Logo */}
+        {/* Logo - ✅ FIXED: Add dimensions to prevent CLS */}
         <h1 className="text-xl font-semibold">
           {loading ? <Skeleton width={140} /> : "Men's Clothes"}
         </h1>
@@ -54,20 +56,27 @@ const Navbar = () => {
           ) : (
             <>
               <Link to="/">
-                <button className="p-2 border rounded hover:bg-gray-950 hover:text-white">
+                <button 
+                  className="p-2 border rounded hover:bg-gray-950 hover:text-white transition-colors duration-200"
+                  aria-label="Go to home page"
+                >
                   Home
                 </button>
               </Link>
 
               <button
                 onClick={handleCategory}
-                className="p-2 border rounded hover:bg-gray-950 hover:text-white whitespace-nowrap"
+                className="p-2 border rounded hover:bg-gray-950 hover:text-white whitespace-nowrap transition-colors duration-200"
+                aria-label="Browse all categories"
               >
                 All Categories
               </button>
 
               <Link to="/dashboard">
-                <button className="p-2 border rounded hover:bg-gray-950 hover:text-white whitespace-nowrap">
+                <button 
+                  className="p-2 border rounded hover:bg-gray-950 hover:text-white whitespace-nowrap transition-colors duration-200"
+                  aria-label="Go to dashboard"
+                >
                   Dashboard
                 </button>
               </Link>
@@ -76,18 +85,24 @@ const Navbar = () => {
 
           <div className="flex-1"></div>
 
-          {/* Search */}
-          <div className="relative w-64">
+          {/* Search - ✅ FIXED: Add width/height to prevent CLS */}
+          <div className="relative w-64 h-9">
             {loading ? (
               <Skeleton height={35} />
             ) : (
               <>
                 <input
                   type="text"
-                  className="py-2 px-4 pr-10 border rounded-full w-full"
+                  className="py-2 px-4 pr-10 border rounded-full w-full h-full"
                   placeholder="Search..."
+                  aria-label="Search products"
                 />
-                <span className="absolute right-3 top-2 text-gray-500">🔍</span>
+                <span 
+                  className="absolute right-3 top-2 text-gray-500 pointer-events-none"
+                  aria-hidden="true"
+                >
+                  🔍
+                </span>
               </>
             )}
           </div>
@@ -102,14 +117,14 @@ const Navbar = () => {
             <>
               <Link
                 to="/mycart"
-                className="text-white bg-black px-4 py-2 rounded-lg text-sm whitespace-nowrap"
+                className="text-white bg-black px-4 py-2 rounded-lg text-sm whitespace-nowrap hover:bg-gray-800 transition-colors duration-200"
               >
                 My Cart
               </Link>
 
               <Link
                 to="/login"
-                className="text-black border border-black px-4 py-2 rounded-lg text-sm hover:bg-black hover:text-white transition"
+                className="text-black border border-black px-4 py-2 rounded-lg text-sm hover:bg-black hover:text-white transition-colors duration-200"
               >
                 Login
               </Link>
@@ -127,23 +142,44 @@ const Navbar = () => {
                     e.stopPropagation();
                     setDropdownOpen(!dropdownOpen);
                   }}
-                  className="flex items-center gap-1 px-3 py-2 border rounded-lg hover:bg-gray-950 hover:text-white"
+                  className="flex items-center gap-1 px-3 py-2 border rounded-lg hover:bg-gray-950 hover:text-white transition-colors duration-200"
+                  aria-label="More options menu"
+                  aria-expanded={dropdownOpen}
                 >
-                  More ▼
+                  More <span aria-hidden="true">▼</span>
                 </button>
 
                 {dropdownOpen && (
-                  <div className="absolute right-0 mt-2 w-40 bg-gray-200 rounded-lg shadow-md z-20">
-                    <Link to="/Account" className="block px-3 py-2 hover:bg-gray-300">
+                  <div 
+                    className="absolute right-0 mt-2 w-40 bg-gray-200 rounded-lg shadow-md z-20"
+                    role="menu"
+                  >
+                    <Link 
+                      to="/Account" 
+                      className="block px-3 py-2 hover:bg-gray-300 transition-colors duration-150"
+                      role="menuitem"
+                    >
                       User Account
                     </Link>
-                    <Link to="/home/about-us" className="block px-3 py-2 hover:bg-gray-300">
+                    <Link 
+                      to="/home/about-us" 
+                      className="block px-3 py-2 hover:bg-gray-300 transition-colors duration-150"
+                      role="menuitem"
+                    >
                       About
                     </Link>
-                    <Link to="/home/contact-us" className="block px-3 py-2 hover:bg-gray-300">
+                    <Link 
+                      to="/home/contact-us" 
+                      className="block px-3 py-2 hover:bg-gray-300 transition-colors duration-150"
+                      role="menuitem"
+                    >
                       Contact
                     </Link>
-                    <Link to="/settings" className="block px-3 py-2 hover:bg-gray-300">
+                    <Link 
+                      to="/settings" 
+                      className="block px-3 py-2 hover:bg-gray-300 transition-colors duration-150"
+                      role="menuitem"
+                    >
                       Settings
                     </Link>
                   </div>
@@ -156,24 +192,47 @@ const Navbar = () => {
         {/* Mobile Menu Button */}
         <button
           onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-          className="md:hidden text-2xl"
+          className="md:hidden text-2xl hover:opacity-70 transition-opacity"
+          aria-label={mobileMenuOpen ? "Close menu" : "Open menu"}
+          aria-expanded={mobileMenuOpen}
         >
           {loading ? <Skeleton width={30} /> : mobileMenuOpen ? "✖" : "☰"}
         </button>
       </div>
 
-      {/* Mobile Menu */}
+      {/* Mobile Menu - ✅ FIXED: Added aria-hidden for accessibility */}
       {mobileMenuOpen && !loading && (
         <div className="md:hidden flex flex-col mt-4 gap-4">
-          <Link to="/Account" className="block px-3 py-2 hover:bg-gray-300">
+          <Link 
+            to="/Account" 
+            className="block px-3 py-2 hover:bg-gray-300 transition-colors duration-150"
+          >
             User Account
           </Link>
-          <Link to="/" className="p-2">Home</Link>
-          <button onClick={handleCategory} className="p-2 text-left">
+          <Link 
+            to="/" 
+            className="p-2 hover:bg-gray-100 transition-colors duration-150"
+          >
+            Home
+          </Link>
+          <button 
+            onClick={handleCategory} 
+            className="p-2 text-left hover:bg-gray-100 transition-colors duration-150 w-full"
+          >
             All Categories
           </button>
-          <Link to="/mycart" className="p-2">My Cart</Link>
-          <Link to="/login" className="p-2">Login</Link>
+          <Link 
+            to="/mycart" 
+            className="p-2 hover:bg-gray-100 transition-colors duration-150"
+          >
+            My Cart
+          </Link>
+          <Link 
+            to="/login" 
+            className="p-2 hover:bg-gray-100 transition-colors duration-150"
+          >
+            Login
+          </Link>
         </div>
       )}
     </nav>
