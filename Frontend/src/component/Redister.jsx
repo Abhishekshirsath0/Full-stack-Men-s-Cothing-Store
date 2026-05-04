@@ -1,38 +1,58 @@
-import React from "react";
-import { useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { AddDataToServer } from "../Service";
+import { FormSkeleton } from "./Skeleton/SkeletonLoader";
 
 const Register = () => {
+  const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
 
   const Firstname = useRef();
   const Lastname = useRef();
   const Address = useRef();
   const Email = useRef();
-  const Phone = useRef(); 
+  const Phone = useRef();
   const Password = useRef();
   const ConfirmPassword = useRef();
+
+  useEffect(() => {
+    const timer = setTimeout(() => setLoading(false), 250);
+    return () => clearTimeout(timer);
+  }, []);
+
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gray-50 px-4">
+        <FormSkeleton />
+      </div>
+    );
+  }
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const userData = {
-      Firstname: Firstname.current.value,
-      Lastname: Lastname.current.value,
-      Address: Address.current.value,
-      Email: Email.current.value,
-      Phone: Phone.current.value, 
-      Password: Password.current.value,
-      ConfirmPassword: ConfirmPassword.current.value,
-    };
+    if (Password.current.value !== ConfirmPassword.current.value) {
+      alert("Passwords do not match");
+      return;
+    }
 
-    AddDataToServer(userData);
+    try {
+      const userData = {
+        Firstname: Firstname.current.value,
+        Lastname: Lastname.current.value,
+        Address: Address.current.value,
+        Email: Email.current.value,
+        Phone: Phone.current.value,
+        Password: Password.current.value,
+      };
 
-
-
-    // Optional redirect after register
-    navigate("/login");
+      await AddDataToServer(userData);
+      console.log("step 0");
+      navigate("/login");
+    } catch (err) {
+      console.error("Registration failed:", err);
+      alert(err.message || "Registration failed. Please try again.");
+    }
   };
 
   return (
@@ -52,7 +72,6 @@ const Register = () => {
               required
               className="w-full border px-3 py-2 rounded"
             />
-
             <input
               ref={Lastname}
               type="text"
@@ -80,7 +99,7 @@ const Register = () => {
             className="w-full border px-3 py-2 rounded"
           />
 
-          {/* ✅ Phone Field */}
+          {/* Phone */}
           <input
             ref={Phone}
             type="tel"

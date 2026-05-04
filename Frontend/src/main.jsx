@@ -3,6 +3,7 @@ import { createRoot } from "react-dom/client";
 import "./index.css";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import { Toaster } from "react-hot-toast";
+import { PageSkeleton } from "./component/Skeleton/SkeletonLoader";
 
 // ✅ Lazy imports
 const App = lazy(() => import("./App.jsx"));
@@ -21,8 +22,12 @@ const Payment = lazy(() => import("./component/Account/Payment.jsx"));
 const Dashboard = lazy(() => import("./component/DashBoard/Dashboard.jsx"));
 const AddProduct = lazy(() => import("./component/DashBoard/AddProduct.jsx"));
 const ManageUsers = lazy(() => import("./component/DashBoard/ManageUsers.jsx"));
-const ManageOrders = lazy(() => import("./component/DashBoard/ManageOrders.jsx"));
-const ManageProducts = lazy(() => import("./component/DashBoard/ManageProducts.jsx"));
+const ManageOrders = lazy(
+  () => import("./component/DashBoard/ManageOrders.jsx"),
+);
+const ManageProducts = lazy(
+  () => import("./component/DashBoard/ManageProducts.jsx"),
+);
 
 const Register = lazy(() => import("./component/Redister.jsx"));
 
@@ -35,6 +40,8 @@ const router = createBrowserRouter([
   { path: "/register", element: <Register /> },
   { path: "/home/about-us", element: <About /> },
   { path: "/home/contact-us", element: <Contact /> },
+  { path: "/collections", element: <FilterSidebar /> },
+  { path: "/collections/:category", element: <FilterSidebar /> },
 
   {
     path: "/account",
@@ -67,14 +74,8 @@ createRoot(document.getElementById("root")).render(
   <StrictMode>
     <Toaster position="bottom-right" />
 
-    <Suspense
-      fallback={
-        <h1 className="text-center mt-10 text-lg font-semibold">
-          Loading...
-        </h1>
-      }
-    >
+    <Suspense fallback={<PageSkeleton />}>
       <RouterProvider router={router} />
     </Suspense>
-  </StrictMode>
+  </StrictMode>,
 );

@@ -1,24 +1,19 @@
 export const AddDataToServer = async ({
-  Firstname,
-  Lastname,
-  Address,
-  Email,
-  Phone,
-  Password,
+  Firstname, Lastname, Address, Email, Phone, Password,
 }) => {
   const response = await fetch("http://localhost:8000/api/user", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({
-      Firstname,
-      Lastname,
-      Address,
-      Email,
-      Phone,
-      Password,
-    }),
+    body: JSON.stringify({ Firstname, Lastname, Address, Email, Phone, Password }),
   });
+
+  if (!response.ok) {
+    const error = await response.json();
+    throw new Error(error.message || "Failed to register user");
+  }
+
   return mapServerDataintoLocalData(await response.json());
+  console.log("step 1");
 };
 
 const mapServerDataintoLocalData = (user) => ({
@@ -31,8 +26,11 @@ const mapServerDataintoLocalData = (user) => ({
   Usertype: user.Usertype,
 });
 
+
+
 export const GetDataFromServer = async () => {
   const response = await fetch("http://localhost:8000/api/user");
+  if (!response.ok) throw new Error("Failed to fetch users");
   const data = await response.json();
   return data.map(mapServerDataintoLocalData);
 };
@@ -69,22 +67,14 @@ export const UpdateUserRoleOnServer = async (_id, role) => {
 
 const mapProductDataIntoLocalData = (product) => ({
   _id: product?._id,
-  name: product?.ProductName,
   ProductName: product?.ProductName,
-  brand: product?.Brand,
   Brand: product?.Brand,
-  price: product?.Price,
   Price: product?.Price,
-  discount: product?.Discount,
   Discount: product?.Discount,
   Category: product?.Category,
-  description: product?.Description,
   Description: product?.Description,
-  size: product?.Size,
   Size: product?.Size,
-  imageUrl: product?.Images?.[0] || null,
-  Images: product?.Images,
-  rating: product?.Rating || 4.5,
+  Images: product?.Images, // 👈 added
   createdAt: product?.createdAt,
   updatedAt: product?.updatedAt,
 });
@@ -132,8 +122,7 @@ export const UpdateProductToServer = async (_id, updatedProduct) => {
       body: JSON.stringify(updatedProduct),
     });
     const data = await response.json();
-    if (!response.ok)
-      throw new Error(data.message || "Failed to update product");
+    if (!response.ok) throw new Error(data.message || "Failed to update product");
     return mapProductDataIntoLocalData(data);
   } catch (error) {
     console.error("UpdateProductToServer Error:", error.message);
@@ -157,7 +146,7 @@ export const UploadImagesToServer = async (imageFiles) => {
 
       if (!data.success) throw new Error("Image upload failed");
       return data.data; // cloudinary URL
-    }),
+    })
   );
   return urls;
 };

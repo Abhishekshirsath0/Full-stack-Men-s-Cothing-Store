@@ -1,6 +1,10 @@
-import { useState, useRef } from "react";
+import { useEffect, useState, useRef } from "react";
+import { useParams } from "react-router-dom";
+import { PageSkeleton } from "./Skeleton/SkeletonLoader";
 
 export default function FilterSidebar() {
+  const { category } = useParams();
+  const [loading, setLoading] = useState(true);
   const sections = ["Category", "Brand", "Size", "Color"];
   const [expanded, setExpanded] = useState({
     Category: false,
@@ -16,6 +20,11 @@ export default function FilterSidebar() {
     Color: useRef(null),
   };
 
+  useEffect(() => {
+    const timer = setTimeout(() => setLoading(false), 200);
+    return () => clearTimeout(timer);
+  }, []);
+
   const toggleSection = (section) => {
     setExpanded((prev) => ({
       ...prev,
@@ -28,6 +37,17 @@ export default function FilterSidebar() {
     alert("Filters applied!");
     // Here you can handle filter submission logic
   };
+
+  const categoryLabel = category
+    ? category
+        .split("-")
+        .map((word) => word[0].toUpperCase() + word.slice(1))
+        .join(" ")
+    : "All Products";
+
+  if (loading) {
+    return <PageSkeleton />;
+  }
 
   return (
     <form onSubmit={handleApply}>
@@ -151,10 +171,7 @@ export default function FilterSidebar() {
                             "Luxury Timepieces",
                             "Sunglasses",
                           ].map((item) => (
-                            <li
-                              key={item}
-                              className="flex items-center gap-3"
-                            >
+                            <li key={item} className="flex items-center gap-3">
                               <input
                                 id={item}
                                 type="checkbox"
@@ -192,10 +209,7 @@ export default function FilterSidebar() {
                             "Puma",
                             "Tommy Hilfiger",
                           ].map((brand) => (
-                            <li
-                              key={brand}
-                              className="flex items-center gap-3"
-                            >
+                            <li key={brand} className="flex items-center gap-3">
                               <input
                                 id={brand}
                                 type="checkbox"
@@ -215,24 +229,17 @@ export default function FilterSidebar() {
 
                     {section === "Size" && (
                       <div className="flex flex-wrap gap-3">
-                        {[
-                          "XS",
-                          "S",
-                          "M",
-                          "L",
-                          "XL",
-                          "XXL",
-                          "XXXL",
-                          "4XL",
-                        ].map((size) => (
-                          <button
-                            key={size}
-                            type="button"
-                            className="cursor-pointer border border-gray-300 hover:border-blue-600 rounded-md text-[13px] text-slate-600 font-medium py-1 px-1 min-w-14"
-                          >
-                            {size}
-                          </button>
-                        ))}
+                        {["XS", "S", "M", "L", "XL", "XXL", "XXXL", "4XL"].map(
+                          (size) => (
+                            <button
+                              key={size}
+                              type="button"
+                              className="cursor-pointer border border-gray-300 hover:border-blue-600 rounded-md text-[13px] text-slate-600 font-medium py-1 px-1 min-w-14"
+                            >
+                              {size}
+                            </button>
+                          ),
+                        )}
                       </div>
                     )}
 
@@ -276,14 +283,11 @@ export default function FilterSidebar() {
         <div className="w-full py-6 px-8">
           {/* Example content area */}
           <h3 className="text-slate-900 text-lg font-semibold mb-4">
-            Products
+            {categoryLabel}
           </h3>
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 mt-8">
             {[...Array(6)].map((_, i) => (
-              <div
-                key={i}
-                className="bg-gray-100 w-full h-48 rounded-md"
-              ></div>
+              <div key={i} className="bg-gray-100 w-full h-48 rounded-md"></div>
             ))}
           </div>
         </div>

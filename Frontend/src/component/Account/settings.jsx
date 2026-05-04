@@ -1,6 +1,17 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import { PageSkeleton } from "../Skeleton/SkeletonLoader";
 
 const Settings = () => {
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const timer = setTimeout(() => setLoading(false), 250);
+    return () => clearTimeout(timer);
+  }, []);
+
+  if (loading) {
+    return <PageSkeleton />;
+  }
   const [darkMode, setDarkMode] = useState(false);
   const [notifications, setNotifications] = useState(true);
   const [language, setLanguage] = useState("en");
@@ -39,7 +50,9 @@ const Settings = () => {
           {/* Notifications toggle */}
           <div className="flex items-center justify-between">
             <div>
-              <h3 className="text-sm font-medium text-gray-700">Notifications</h3>
+              <h3 className="text-sm font-medium text-gray-700">
+                Notifications
+              </h3>
               <p className="text-xs text-gray-500">Enable app notifications</p>
             </div>
             <button

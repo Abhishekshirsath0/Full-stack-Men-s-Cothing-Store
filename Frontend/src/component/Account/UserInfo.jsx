@@ -1,14 +1,27 @@
-import axios from "axios";
 import { useEffect, useState } from "react";
-
- 
+import { ProfileSkeleton } from "../Skeleton/SkeletonLoader";
 
 const fields = [
-  { id: "firstName", label: "First Name", defaultValue: "Abhishek", colSpan: 1 },
+  {
+    id: "firstName",
+    label: "First Name",
+    defaultValue: "Abhishek",
+    colSpan: 1,
+  },
   { id: "lastName", label: "Last Name", defaultValue: "Shirsath", colSpan: 1 },
-  { id: "email", label: "Email", defaultValue: "abhishek@gmail.com", colSpan: 1 },
+  {
+    id: "email",
+    label: "Email",
+    defaultValue: "abhishek@gmail.com",
+    colSpan: 1,
+  },
   { id: "phone", label: "Phone", defaultValue: "+91 9876543210", colSpan: 1 },
-  { id: "address", label: "Address", defaultValue: "Mumbai, Maharashtra, India", colSpan: 2 },
+  {
+    id: "address",
+    label: "Address",
+    defaultValue: "Mumbai, Maharashtra, India",
+    colSpan: 2,
+  },
 ];
 
 const EditableField = ({ label, defaultValue, colSpan }) => {
@@ -30,8 +43,6 @@ const EditableField = ({ label, defaultValue, colSpan }) => {
     setTemp(value);
     setIsEditing(false);
   };
-
-
 
   return (
     <div className={colSpan === 2 ? "md:col-span-2" : ""}>
@@ -143,6 +154,17 @@ const GenderField = () => {
 };
 
 const UserInfo = () => {
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const timer = setTimeout(() => setLoading(false), 250);
+    return () => clearTimeout(timer);
+  }, []);
+
+  if (loading) {
+    return <ProfileSkeleton />;
+  }
+
   return (
     <>
       {/* Profile Header */}

@@ -1,4 +1,18 @@
+import { useEffect, useState } from "react";
+import { PageSkeleton } from "./Skeleton/SkeletonLoader";
+
 const About = () => {
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const timer = setTimeout(() => setLoading(false), 200);
+    return () => clearTimeout(timer);
+  }, []);
+
+  if (loading) {
+    return <PageSkeleton />;
+  }
+
   return (
     <section className="py-24 relative">
       <div className="w-full max-w-7xl px-4 md:px-5 lg:px-5 mx-auto">
@@ -33,4 +47,4 @@ const About = () => {
     </section>
   );
 };
-export default About
+export default About;

@@ -1,6 +1,21 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import { FormSkeleton } from "../Skeleton/SkeletonLoader";
 
 const Payment = () => {
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const timer = setTimeout(() => setLoading(false), 250);
+    return () => clearTimeout(timer);
+  }, []);
+
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gray-100 px-4">
+        <FormSkeleton />
+      </div>
+    );
+  }
   const [paymentMethod, setPaymentMethod] = useState("card");
   const [cardNumber, setCardNumber] = useState("");
   const [expiry, setExpiry] = useState("");
@@ -60,7 +75,9 @@ const Payment = () => {
             </div>
 
             <div>
-              <label className="mb-1 block text-sm font-medium text-gray-600">Card Number</label>
+              <label className="mb-1 block text-sm font-medium text-gray-600">
+                Card Number
+              </label>
               <input
                 type="text"
                 value={cardNumber}
@@ -73,7 +90,9 @@ const Payment = () => {
 
             <div className="grid grid-cols-2 gap-3">
               <div>
-                <label className="mb-1 block text-sm font-medium text-gray-600">Expiry</label>
+                <label className="mb-1 block text-sm font-medium text-gray-600">
+                  Expiry
+                </label>
                 <input
                   type="text"
                   value={expiry}
@@ -84,7 +103,9 @@ const Payment = () => {
               </div>
 
               <div>
-                <label className="mb-1 block text-sm font-medium text-gray-600">CVV</label>
+                <label className="mb-1 block text-sm font-medium text-gray-600">
+                  CVV
+                </label>
                 <input
                   type="text"
                   value={cvv}

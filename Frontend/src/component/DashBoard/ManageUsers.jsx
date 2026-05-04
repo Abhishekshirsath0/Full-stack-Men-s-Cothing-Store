@@ -1,9 +1,10 @@
 import { useState, useEffect } from "react";
 import {
   GetDataFromServer,
- DeleteUserFromSErver,
+  DeleteUserFromSErver,
   UpdateUserRoleOnServer,
 } from "../../Service.js";
+import { UserListSkeleton } from "../Skeleton/SkeletonLoader";
 
 const ManageUsers = () => {
   const [users, setUsers] = useState([]);
@@ -14,7 +15,7 @@ const ManageUsers = () => {
     const fetchUsers = async () => {
       try {
         const userData = await GetDataFromServer();
-       
+
         // ✅ normalize backend field (Usertype → role)
         const updatedUsers = userData.map((user) => ({
           ...user,
@@ -42,8 +43,8 @@ const ManageUsers = () => {
               ...user,
               pendingRole: newRole === user.role ? null : newRole,
             }
-          : user
-      )
+          : user,
+      ),
     );
   };
 
@@ -56,7 +57,7 @@ const ManageUsers = () => {
     try {
       const success = await UpdateUserRoleOnServer(
         userId,
-        user.pendingRole // user.pendingRole is the new role we want to set
+        user.pendingRole, // user.pendingRole is the new role we want to set
       );
 
       if (success) {
@@ -68,8 +69,8 @@ const ManageUsers = () => {
                   role: user.pendingRole,
                   pendingRole: null,
                 }
-              : u
-          )
+              : u,
+          ),
         );
       } else {
         alert("Failed to update role on server");
@@ -107,7 +108,11 @@ const ManageUsers = () => {
   });
 
   if (loading) {
-    return <div className="text-center p-10">Loading users...</div>;
+    return (
+      <div className="min-h-screen bg-gray-100 p-10">
+        <UserListSkeleton count={6} />
+      </div>
+    );
   }
 
   return (
@@ -166,9 +171,7 @@ const ManageUsers = () => {
                   { label: "ID", value: user._id },
                 ].map(({ label, value }) => (
                   <div key={`${user._id}-${label}`}>
-                    <p className="text-xs text-gray-400 uppercase">
-                      {label}
-                    </p>
+                    <p className="text-xs text-gray-400 uppercase">{label}</p>
                     <p className="text-sm text-gray-800 break-all">
                       {value || "N/A"}
                     </p>
@@ -178,9 +181,7 @@ const ManageUsers = () => {
 
               {/* ROLE CHANGE */}
               <div className="border-t border-gray-100 pt-3 flex flex-col sm:flex-row sm:items-center gap-3">
-                <span className="text-sm text-gray-500">
-                  Change Role:
-                </span>
+                <span className="text-sm text-gray-500">Change Role:</span>
 
                 <div className="flex gap-4">
                   {["user", "admin"].map((roleOption) => (
@@ -192,9 +193,7 @@ const ManageUsers = () => {
                         type="radio"
                         name={`role-${user._id}`}
                         checked={displayRole === roleOption}
-                        onChange={() =>
-                          handleRoleChange(user._id, roleOption)
-                        }
+                        onChange={() => handleRoleChange(user._id, roleOption)}
                         className="w-4 h-4 accent-blue-600"
                       />
                       <span className="text-sm">{roleOption}</span>

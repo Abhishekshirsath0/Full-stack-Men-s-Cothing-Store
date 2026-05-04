@@ -1,16 +1,26 @@
-import { useState } from "react";
+import { Suspense, useEffect, useState } from "react";
 import { Link, Outlet } from "react-router-dom";
+import { DashboardSkeleton, PageSkeleton } from "../Skeleton/SkeletonLoader";
 
 const Account = () => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const timer = setTimeout(() => setLoading(false), 200);
+    return () => clearTimeout(timer);
+  }, []);
 
   const handleLinkClick = () => {
     setSidebarOpen(false);
   };
 
+  if (loading) {
+    return <DashboardSkeleton />;
+  }
+
   return (
     <div className="flex h-screen bg-gray-100">
-
       {/* MOBILE TOP BAR */}
       <div className="flex items-center justify-between bg-white p-4 md:hidden shadow fixed top-0 left-0 right-0 z-30">
         <h1 className="font-semibold text-lg">Account</h1>
@@ -54,23 +64,43 @@ const Account = () => {
 
         {/* LINKS */}
         <nav className="space-y-2">
-          <Link onClick={handleLinkClick} to="/" className="block p-2 rounded hover:bg-gray-100">
+          <Link
+            onClick={handleLinkClick}
+            to="/"
+            className="block p-2 rounded hover:bg-gray-100"
+          >
             Home
           </Link>
 
-          <Link onClick={handleLinkClick} to="add-product" className="block p-2 rounded hover:bg-gray-100">
+          <Link
+            onClick={handleLinkClick}
+            to="add-product"
+            className="block p-2 rounded hover:bg-gray-100"
+          >
             Add Product
           </Link>
 
-          <Link onClick={handleLinkClick} to="manage-products" className="block p-2 rounded hover:bg-gray-100">
+          <Link
+            onClick={handleLinkClick}
+            to="manage-products"
+            className="block p-2 rounded hover:bg-gray-100"
+          >
             Manage Products
           </Link>
 
-          <Link onClick={handleLinkClick} to="manage-users" className="block p-2 rounded hover:bg-gray-100">
+          <Link
+            onClick={handleLinkClick}
+            to="manage-users"
+            className="block p-2 rounded hover:bg-gray-100"
+          >
             Manage Users
           </Link>
 
-          <Link onClick={handleLinkClick} to="manage-order" className="block p-2 rounded hover:bg-gray-100">
+          <Link
+            onClick={handleLinkClick}
+            to="manage-order"
+            className="block p-2 rounded hover:bg-gray-100"
+          >
             Manage Orders
           </Link>
         </nav>
@@ -90,7 +120,6 @@ const Account = () => {
           <Outlet />
         </div>
       </main>
-
     </div>
   );
 };

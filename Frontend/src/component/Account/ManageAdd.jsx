@@ -1,6 +1,17 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import { PageSkeleton } from "../Skeleton/SkeletonLoader";
 
 const ManageAddress = () => {
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const timer = setTimeout(() => setLoading(false), 250);
+    return () => clearTimeout(timer);
+  }, []);
+
+  if (loading) {
+    return <PageSkeleton />;
+  }
   const [addresses, setAddresses] = useState([
     {
       id: 1,
@@ -31,7 +42,8 @@ const ManageAddress = () => {
   };
 
   const handleSaveAddress = () => {
-    const id = addresses.length > 0 ? Math.max(...addresses.map((a) => a.id)) + 1 : 1;
+    const id =
+      addresses.length > 0 ? Math.max(...addresses.map((a) => a.id)) + 1 : 1;
     setAddresses((prev) => [...prev, { id, ...newAddress }]);
     setNewAddress({
       name: "",
@@ -50,11 +62,15 @@ const ManageAddress = () => {
   return (
     <div className="mx-auto max-w-3xl p-4">
       {/* Header */}
-      <h2 className="mb-6 text-2xl font-semibold text-gray-800">Manage Addresses</h2>
+      <h2 className="mb-6 text-2xl font-semibold text-gray-800">
+        Manage Addresses
+      </h2>
 
       {/* Add Address Form */}
       <div className="mb-8 rounded-lg border border-gray-200 bg-white p-6 shadow-sm">
-        <h3 className="mb-4 text-lg font-medium text-gray-700">Add New Address</h3>
+        <h3 className="mb-4 text-lg font-medium text-gray-700">
+          Add New Address
+        </h3>
 
         <div className="space-y-4">
           <div>
@@ -87,7 +103,9 @@ const ManageAddress = () => {
 
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
             <div>
-              <label className="mb-1 block text-sm font-medium text-gray-600">City</label>
+              <label className="mb-1 block text-sm font-medium text-gray-600">
+                City
+              </label>
               <input
                 type="text"
                 name="city"
@@ -99,7 +117,9 @@ const ManageAddress = () => {
             </div>
 
             <div>
-              <label className="mb-1 block text-sm font-medium text-gray-600">State</label>
+              <label className="mb-1 block text-sm font-medium text-gray-600">
+                State
+              </label>
               <input
                 type="text"
                 name="state"
@@ -111,7 +131,9 @@ const ManageAddress = () => {
             </div>
 
             <div>
-              <label className="mb-1 block text-sm font-medium text-gray-600">Pincode</label>
+              <label className="mb-1 block text-sm font-medium text-gray-600">
+                Pincode
+              </label>
               <input
                 type="text"
                 name="pincode"
@@ -134,7 +156,9 @@ const ManageAddress = () => {
 
       {/* Saved Addresses List */}
       <div className="rounded-lg border border-gray-200 bg-white p-6 shadow-sm">
-        <h3 className="mb-4 text-lg font-medium text-gray-700">Saved Addresses</h3>
+        <h3 className="mb-4 text-lg font-medium text-gray-700">
+          Saved Addresses
+        </h3>
 
         {addresses.length === 0 ? (
           <p className="text-sm text-gray-500">No addresses saved.</p>

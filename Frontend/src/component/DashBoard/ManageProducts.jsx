@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from "react";
-import {
-  DeleteProductFromSErver,
-  GetProductFromServer,
-} from "../../Service";
+import { DeleteProductFromSErver, GetProductFromServer } from "../../Service";
+import { ProductGridSkeleton } from "../Skeleton/SkeletonLoader";
+import Skeleton from "react-loading-skeleton";
 
 import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
@@ -11,6 +10,7 @@ const ManageProducts = () => {
   const [search, setSearch] = useState("");
   const [products, setProducts] = useState([]);
   const [expanded, setExpanded] = useState({});
+  const [loading, setLoading] = useState(true);
 
   const navigate = useNavigate();
 
@@ -22,11 +22,24 @@ const ManageProducts = () => {
         setProducts(data || []);
       } catch (error) {
         toast.error("Failed to fetch products ❌");
+      } finally {
+        setLoading(false);
       }
     };
 
     FetchData();
   }, []);
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-gray-100 p-6">
+        <div className="max-w-7xl mx-auto">
+          <Skeleton height={32} width={220} className="mb-6" />
+          <ProductGridSkeleton count={6} />
+        </div>
+      </div>
+    );
+  }
 
   // ================= TOGGLE DESCRIPTION =================
   const toggleDescription = (id) => {
@@ -68,8 +81,8 @@ const ManageProducts = () => {
 
   const filteredProducts = products.filter((p) =>
     [p.ProductName, p.Brand, p.Category].some((field) =>
-      field?.toLowerCase().includes(searchText)
-    )
+      field?.toLowerCase().includes(searchText),
+    ),
   );
 
   // ================= GROUP BY DATE =================
@@ -89,7 +102,7 @@ const ManageProducts = () => {
 
   // SORT DATES (LATEST FIRST)
   const sortedDates = Object.keys(groupedByDate).sort(
-    (a, b) => new Date(b) - new Date(a)
+    (a, b) => new Date(b) - new Date(a),
   );
 
   return (
@@ -131,7 +144,10 @@ const ManageProducts = () => {
                   >
                     {/* IMAGE ✅ fixed */}
                     <img
-                      src={product.Images?.[0] || "https://placehold.co/300x200?text=No+Image"}
+                      src={
+                        product.Images?.[0] ||
+                        "https://placehold.co/300x200?text=No+Image"
+                      }
                       alt={product.ProductName}
                       className="w-full h-48 object-cover"
                     />
@@ -141,9 +157,7 @@ const ManageProducts = () => {
                         {product.ProductName}
                       </h2>
 
-                      <p className="text-gray-600">
-                        Brand: {product.Brand}
-                      </p>
+                      <p className="text-gray-600">Brand: {product.Brand}</p>
 
                       <p className="text-gray-600">
                         Category: {product.Category}
@@ -166,7 +180,9 @@ const ManageProducts = () => {
                             onClick={() => toggleDescription(product._id)}
                             className="text-blue-500 cursor-pointer ml-1"
                           >
-                            {expanded[product._id] ? " Show less" : "...Read more"}
+                            {expanded[product._id]
+                              ? " Show less"
+                              : "...Read more"}
                           </span>
                         )}
                       </p>
@@ -185,7 +201,9 @@ const ManageProducts = () => {
                         </button>
 
                         <button
-                          onClick={() => handleDelete(product._id, product.ProductName)}
+                          onClick={() =>
+                            handleDelete(product._id, product.ProductName)
+                          }
                           className="flex-1 bg-red-500 text-white py-2 rounded-lg"
                         >
                           Delete

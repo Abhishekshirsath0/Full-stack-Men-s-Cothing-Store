@@ -1,30 +1,42 @@
 import User from "../model/user.js";
 
-export const postuserData = async (req, res, next) => {
+import bcrypt from "bcrypt";
+
+// CREATE: Register new user
+export const postuserData = async (req, res) => {
   try {
+    console.log("LoginController postuserData received:", req.body);
+
     const { Firstname, Lastname, Address, Email, Phone, Password } = req.body;
+
+    const salt = await bcrypt.genSalt(10);
+    const hashedPassword = await bcrypt.hash(Password, salt); // ✅ promise-based
+
     const newUser = new User({
       Firstname,
       Lastname,
       Address,
       Email,
       Phone,
-      Password,
+      Password: hashedPassword,
     });
-    const savedUser = await newUser.save();
 
+    const savedUser = await newUser.save();
+    console.log("LoginController savedUser:", savedUser);
     res.status(201).json(savedUser);
   } catch (err) {
+    console.error("Error saving user:", err);
     res.status(500).json({ message: "Server Error during Saving" });
   }
 };
 
+// READ: Get all users
 export const getuserData = async (req, res) => {
   try {
     const users = await User.find();
     res.status(200).json(users);
-  } catch {
-    console.log("error while reading data at controller");
+  } catch (err) {
+    console.error("Error while reading data at controller:", err);
     res.status(500).json({ message: "Error fetching users" });
   }
 };
