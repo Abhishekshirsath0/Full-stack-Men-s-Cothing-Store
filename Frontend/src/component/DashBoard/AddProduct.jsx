@@ -91,7 +91,7 @@ const handleSubmit = async (e) => {
       Category: Category.current.value,
       Description: Description.current.value,
       Size: form.sizes,
-      Images: imageUrls, // ✅ FIXED
+      Images: imageUrls,
     };
 
     // 3️⃣ Save
