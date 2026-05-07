@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from "react";
-import { DeleteProductFromSErver, GetProductFromServer } from "../../Service";
+import { DeleteProductFromServer, GetProductFromServer } from "../../Service.js"
 import { ProductGridSkeleton } from "../Skeleton/SkeletonLoader";
 import Skeleton from "react-loading-skeleton";
-
 import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 
@@ -21,7 +20,7 @@ const ManageProducts = () => {
         const data = await GetProductFromServer();
         setProducts(data || []);
       } catch (error) {
-        toast.error("Failed to fetch products ❌");
+        toast.error("Failed to fetch products ");
       } finally {
         setLoading(false);
       }
@@ -55,21 +54,21 @@ const ManageProducts = () => {
     if (!confirmDelete) return;
 
     try {
-      const success = await DeleteProductFromSErver(id);
+      const success = await DeleteProductFromServer(id);
 
       if (success) {
-        toast.success(`${name} deleted successfully ✅`);
+        toast.success(`${name} deleted successfully `);
         setProducts((prev) => prev.filter((p) => p._id !== id));
       } else {
-        toast.error("Delete failed ❌");
+        toast.error("Delete failed ");
       }
     } catch (error) {
       console.error(error);
-      toast.error("Something went wrong ❌");
+      toast.error("Something went wrong ");
     }
   };
 
-  // ================= EDIT PRODUCT =================
+  //
   const handleEdit = (product) => {
     navigate("/dashboard/edit-product", {
       state: product,
@@ -81,8 +80,8 @@ const ManageProducts = () => {
 
   const filteredProducts = products.filter((p) =>
     [p.ProductName, p.Brand, p.Category].some((field) =>
-      field?.toLowerCase().includes(searchText),
-    ),
+      field?.toLowerCase().includes(searchText)
+    )
   );
 
   // ================= GROUP BY DATE =================
@@ -100,9 +99,16 @@ const ManageProducts = () => {
     return acc;
   }, {});
 
-  // SORT DATES (LATEST FIRST)
+  
+  Object.keys(groupedByDate).forEach((date) => {
+    groupedByDate[date].sort(
+      (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
+    );
+  });
+
+  
   const sortedDates = Object.keys(groupedByDate).sort(
-    (a, b) => new Date(b) - new Date(a),
+    (a, b) => new Date(b) - new Date(a)
   );
 
   return (
@@ -142,7 +148,7 @@ const ManageProducts = () => {
                     key={product._id}
                     className="bg-white rounded-2xl shadow-lg overflow-hidden"
                   >
-                    {/* IMAGE ✅ fixed */}
+                    {/* IMAGE */}
                     <img
                       src={
                         product.Images?.[0] ||
@@ -195,7 +201,7 @@ const ManageProducts = () => {
                       <div className="flex gap-3 mt-3">
                         <button
                           onClick={() => handleEdit(product)}
-                          className="flex-1 bg-blue-500 text-white py-2 rounded-lg"
+                          className="flex-1 bg-blue-500 text-white py-2 rounded-lg hover:bg-blue-600 transition-colors duration-200"
                         >
                           Edit
                         </button>
@@ -204,7 +210,7 @@ const ManageProducts = () => {
                           onClick={() =>
                             handleDelete(product._id, product.ProductName)
                           }
-                          className="flex-1 bg-red-500 text-white py-2 rounded-lg"
+                          className="flex-1 bg-red-500 text-white py-2 rounded-lg hover:bg-red-600 transition-colors duration-200"
                         >
                           Delete
                         </button>

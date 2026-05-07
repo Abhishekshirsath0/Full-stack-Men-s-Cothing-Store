@@ -24,7 +24,7 @@ const OrderPage = () => {
           </div>
 
           <div className="bg-white rounded-2xl shadow-lg overflow-hidden">
-            <div className="bg-gradient-to-r from-indigo-600 via-purple-600 to-purple-600 p-6">
+            <div className="bg-linear-to-r from-indigo-600 via-purple-600 to-purple-600 p-6">
               <h2 className="text-[22px] font-semibold text-white">
                 Thank you for your order!
               </h2>
@@ -134,7 +134,7 @@ const OrderPage = () => {
 
                 <div className="space-y-4">
                   <div className="flex items-start gap-4 max-sm:flex-col">
-                    <div className="w-[70px] h-[70px] bg-gray-200 rounded-lg flex items-center justify-center shrink-0 overflow-hidden">
+                    <div className="w-17.5 h-17.5 bg-gray-200 rounded-lg flex items-center justify-center shrink-0 overflow-hidden">
                       <img
                         src="https://readymadeui.com/images/watch1.webp"
                         alt="Stylish Golden Watch"
@@ -159,7 +159,7 @@ const OrderPage = () => {
                   </div>
 
                   <div className="flex items-start gap-4 max-sm:flex-col">
-                    <div className="w-[70px] h-[70px] bg-gray-200 rounded-lg flex items-center justify-center shrink-0 overflow-hidden">
+                    <div className="w-17.5 h-17.5 bg-gray-200 rounded-lg flex items-center justify-center shrink-0 overflow-hidden">
                       <img
                         src="https://readymadeui.com/images/product14.webp"
                         alt="Velvet Sneaker"

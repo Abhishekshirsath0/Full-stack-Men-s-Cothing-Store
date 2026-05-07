@@ -7,7 +7,7 @@ const Account = () => {
   const closeSidebar = () => setSidebarOpen(false);
   const openSidebar = () => setSidebarOpen(true);
 
-  // Close sidebar on ESC key (better UX)
+  // Close sidebar on ESC key  
   useEffect(() => {
     const handleKey = (e) => {
       if (e.key === "Escape") closeSidebar();

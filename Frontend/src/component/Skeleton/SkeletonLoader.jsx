@@ -1,7 +1,7 @@
 import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
 
-// =================== PAGE SKELETON ===================
+// PAGE SKELETON
 export const PageSkeleton = () => (
   <div className="min-h-screen bg-gray-100 p-6">
     <Skeleton height={40} width={300} className="mb-6" />
@@ -9,7 +9,7 @@ export const PageSkeleton = () => (
   </div>
 );
 
-// =================== NAVBAR SKELETON ===================
+// NAVBAR SKELETON
 export const NavbarSkeleton = () => (
   <nav className="max-w-7xl w-full mx-auto px-4 py-3 border-b border-gray-300">
     <div className="flex items-center justify-between">
@@ -27,14 +27,14 @@ export const NavbarSkeleton = () => (
   </nav>
 );
 
-// =================== CAROUSEL SKELETON ===================
+// CAROUSEL SKELETON
 export const CarouselSkeleton = () => (
   <div className="flex justify-center mt-5">
     <Skeleton height={250} width="100%" className="max-w-3xl rounded-lg" />
   </div>
 );
 
-// =================== PRODUCT CARD SKELETON ===================
+// PRODUCT CARD SKELETON
 export const ProductCardSkeleton = () => (
   <div className="bg-white rounded-xl shadow-md overflow-hidden">
     <Skeleton height={160} />
@@ -47,7 +47,7 @@ export const ProductCardSkeleton = () => (
   </div>
 );
 
-// =================== PRODUCT GRID SKELETON ===================
+
 export const ProductGridSkeleton = ({ count = 6 }) => (
   <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-5">
     {Array(count)
@@ -58,7 +58,7 @@ export const ProductGridSkeleton = ({ count = 6 }) => (
   </div>
 );
 
-// =================== CART ITEM SKELETON ===================
+// CART ITEM SKELETON
 export const CartItemSkeleton = ({ count = 4 }) => (
   <div className="space-y-4">
     {Array(count)
@@ -77,7 +77,7 @@ export const CartItemSkeleton = ({ count = 4 }) => (
   </div>
 );
 
-// =================== TABLE SKELETON ===================
+// TABLE SKELETON
 export const TableSkeleton = ({ rows = 5, columns = 4 }) => (
   <div className="border border-gray-200 rounded-lg overflow-hidden">
     {/* Header */}
@@ -114,7 +114,7 @@ export const TableSkeleton = ({ rows = 5, columns = 4 }) => (
   </div>
 );
 
-// =================== USER LIST SKELETON ===================
+// USER LIST SKELETON
 export const UserListSkeleton = ({ count = 5 }) => (
   <div className="space-y-4">
     {Array(count)
@@ -135,7 +135,7 @@ export const UserListSkeleton = ({ count = 5 }) => (
   </div>
 );
 
-// =================== FORM SKELETON ===================
+// FORM SKELETON
 export const FormSkeleton = () => (
   <div className="w-full max-w-md space-y-4 p-8 border border-gray-200 rounded-lg bg-white">
     <Skeleton height={32} width="80%" />
@@ -147,7 +147,7 @@ export const FormSkeleton = () => (
   </div>
 );
 
-// =================== SIDEBAR SKELETON ===================
+// SIDEBAR SKELETON
 export const SidebarSkeleton = () => (
   <aside className="w-60 bg-white shadow-lg p-4">
     <div className="flex items-center gap-3 mb-8">
@@ -167,7 +167,7 @@ export const SidebarSkeleton = () => (
   </aside>
 );
 
-// =================== FOOTER SKELETON ===================
+// FOOTER SKELETON
 export const FooterSkeleton = () => (
   <footer className="text-gray-500/80 pt-8 px-6 md:px-16 lg:px-24 xl:px-32">
     <div className="flex flex-wrap justify-between gap-12 md:gap-6">
@@ -199,7 +199,7 @@ export const FooterSkeleton = () => (
   </footer>
 );
 
-// =================== HERO SECTION SKELETON ===================
+// HERO SECTION SKELETON
 export const HeroSectionSkeleton = () => (
   <div className="max-w-7xl mx-auto px-4 mt-6">
     {Array(4)
@@ -213,7 +213,7 @@ export const HeroSectionSkeleton = () => (
   </div>
 );
 
-// =================== PROFILE SKELETON ===================
+// PROFILE SKELETON
 export const ProfileSkeleton = () => (
   <div className="min-h-screen bg-gray-100 p-6">
     <div className="max-w-2xl mx-auto">
@@ -233,7 +233,7 @@ export const ProfileSkeleton = () => (
   </div>
 );
 
-// =================== DASHBOARD SKELETON ===================
+// DASHBOARD SKELETON
 export const DashboardSkeleton = () => (
   <div className="flex h-screen bg-gray-100">
     <SidebarSkeleton />
@@ -246,7 +246,7 @@ export const DashboardSkeleton = () => (
   </div>
 );
 
-// =================== MODAL SKELETON ===================
+// MODAL SKELETON
 export const ModalSkeleton = () => (
   <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
     <div className="bg-white p-8 rounded-lg max-w-md w-full space-y-4">

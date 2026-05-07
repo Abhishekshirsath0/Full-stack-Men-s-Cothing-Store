@@ -30,7 +30,7 @@ const ProductSchema = new Schema({
     type: [String],
     enum: ["S", "M", "L", "XL", "30", "32", "34", "36"],
   },
-  Images: [String], // 👈 added
+  Images: [String],
 },
 {
   timestamps: true,

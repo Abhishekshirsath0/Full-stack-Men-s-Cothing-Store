@@ -2,8 +2,9 @@ import { useState, useEffect, useMemo, memo } from "react";
 import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
 import { GetProductFromServer } from "../Service";
+import { Link } from "react-router";
 
-// ================= PRODUCT CARD (MEMOIZED) =================
+//  PRODUCT CARD (MEMOIZED) 
 const ProductCard = memo(({ item }) => (
   <div className="bg-white rounded-xl shadow-md hover:shadow-xl transition overflow-hidden">
 
@@ -42,18 +43,20 @@ const ProductCard = memo(({ item }) => (
           </p>
         )}
       </div>
-
-      <button className="w-full mt-3 bg-black text-white text-xs py-2 rounded hover:bg-gray-800">
-        View
-      </button>
+   <Link
+  to={`/view/${item._id}`}
+  className="block w-full mt-5 bg-black text-white text-sm py-3 rounded-xl text-center"
+>
+  View Product
+</Link>
     </div>
   </div>
 ));
 
-// ================= SECTION =================
+//  SECTION 
 const Section = memo(({ title, category, products, loading }) => {
 
-  // ✅ MEMOIZED FILTER (important optimization)
+  //  MEMOIZED FILTER (important optimization)
   const filtered = useMemo(() => {
     return products.filter(
       (p) => p.Category?.toLowerCase() === category
@@ -77,7 +80,7 @@ const Section = memo(({ title, category, products, loading }) => {
   );
 });
 
-// ================= MAIN COMPONENT =================
+//  MAIN COMPONENT 
 const Card = () => {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);

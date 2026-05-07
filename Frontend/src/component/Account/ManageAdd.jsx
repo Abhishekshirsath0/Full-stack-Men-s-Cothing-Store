@@ -66,7 +66,7 @@ const ManageAddress = () => {
         Manage Addresses
       </h2>
 
-      {/* Add Address Form */}
+      {/* Address Form */}
       <div className="mb-8 rounded-lg border border-gray-200 bg-white p-6 shadow-sm">
         <h3 className="mb-4 text-lg font-medium text-gray-700">
           Add New Address

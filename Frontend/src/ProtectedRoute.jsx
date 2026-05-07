@@ -1,12 +1,21 @@
 import { Outlet, Navigate } from "react-router-dom";
 
+
 const ProtectedRoute = ({ adminOnly = false }) => {
   const token = localStorage.getItem("token");
-  const usertype = localStorage.getItem("usertype");
+  const user = (() => {
+    try {
+      return JSON.parse(localStorage.getItem("user") || "null");
+    } catch {
+      return null;
+    }
+  })();
 
-  if (!token) return <Navigate to="/login" />;
+  // Not authenticated
+  if (!token || !user) return <Navigate to="/login" replace />;
 
-  if (adminOnly && usertype !== "admin") return <Navigate to="/" />;
+  // Authenticated but not admin — bounce to home
+  if (adminOnly && user.Usertype !== "admin") return <Navigate to="/" replace />;
 
   return <Outlet />;
 };

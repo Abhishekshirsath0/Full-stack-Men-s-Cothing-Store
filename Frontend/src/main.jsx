@@ -5,7 +5,7 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import { Toaster } from "react-hot-toast";
 import { PageSkeleton } from "./component/Skeleton/SkeletonLoader";
 
-// ✅ Lazy imports
+//  Lazy imports
 const App = lazy(() => import("./App.jsx"));
 const FilterSidebar = lazy(() => import("./component/CategoryFilter"));
 const Login = lazy(() => import("./component/Login.jsx"));
@@ -31,45 +31,64 @@ const ManageProducts = lazy(
 
 const Register = lazy(() => import("./component/Redister.jsx"));
 
-// ✅ Router config
-const router = createBrowserRouter([
-  { path: "/", element: <App /> },
-  { path: "/home/categories", element: <FilterSidebar /> },
-  { path: "/mycart", element: <MyCart /> },
-  { path: "/login", element: <Login /> },
-  { path: "/register", element: <Register /> },
-  { path: "/home/about-us", element: <About /> },
-  { path: "/home/contact-us", element: <Contact /> },
-  { path: "/collections", element: <FilterSidebar /> },
-  { path: "/collections/:category", element: <FilterSidebar /> },
+const ProtectedRoute = lazy(() => import("./ProtectedRoute.jsx"));
 
+const ViewProduct = lazy(() => import("./component/ViewProduct.jsx"));
+//  Router config
+const router = createBrowserRouter([
   {
-    path: "/account",
-    element: <Account />,
+    path: "/",
+    element: <App />,
     children: [
-      { index: true, element: <UserInfo /> },
-      { path: "orders", element: <OrderPage /> },
-      { path: "address", element: <ManageAddress /> },
-      { path: "payment", element: <Payment /> },
-      { path: "settings", element: <Settings /> },
+      { path: "login", element: <Login /> },
+      { path: "register", element: <Register /> },
+      { path: "home/about-us", element: <About /> },
+      { path: "home/contact-us", element: <Contact /> },
+      { path: "collections", element: <FilterSidebar /> },
+      { path: "collections/:category", element: <FilterSidebar /> },
+      { path: "view/:id", element: <ViewProduct /> },
     ],
   },
 
   {
-    path: "/dashboard",
-    element: <Dashboard />,
+    element: <ProtectedRoute />,
     children: [
-      { index: true, element: <AddProduct /> },
-      { path: "manage-users", element: <ManageUsers /> },
-      { path: "add-product", element: <AddProduct /> },
-      { path: "manage-order", element: <ManageOrders /> },
-      { path: "manage-products", element: <ManageProducts /> },
-      { path: "edit-product", element: <AddProduct /> }, // ✅ fixed path
+      { path: "/mycart", element: <MyCart /> },
+      { path: "/home/categories", element: <FilterSidebar /> },
+      {
+        path: "/account",
+        element: <Account />,
+        children: [
+          { index: true, element: <UserInfo /> },
+          { path: "orders", element: <OrderPage /> },
+          { path: "address", element: <ManageAddress /> },
+          { path: "payment", element: <Payment /> },
+          { path: "settings", element: <Settings /> },
+        ],
+      },
+    ],
+  },
+
+  {
+    element: <ProtectedRoute adminOnly={true} />,
+    children: [
+      {
+        path: "/dashboard",
+        element: <Dashboard />,
+        children: [
+          { index: true, element: <AddProduct /> },
+          { path: "manage-users", element: <ManageUsers /> },
+          { path: "add-product", element: <AddProduct /> },
+          { path: "manage-order", element: <ManageOrders /> },
+          { path: "manage-products", element: <ManageProducts /> },
+          { path: "edit-product", element: <AddProduct /> },
+        ],
+      },
     ],
   },
 ]);
 
-// ✅ Render with Suspense
+// Render with Suspense
 createRoot(document.getElementById("root")).render(
   <StrictMode>
     <Toaster position="bottom-right" />

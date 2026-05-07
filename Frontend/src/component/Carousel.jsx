@@ -9,7 +9,7 @@ import { useState, useEffect } from "react";
 import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
 
-// ✅ Image data
+//  Image data
 const CAROUSEL_IMAGES = [
   {
     id: 1,
@@ -44,9 +44,9 @@ const CAROUSEL_IMAGES = [
 ];
 
 export default function Carousel() {
-  const [loading, setLoading] = useState(false); // ✅ FIXED: Start as false, no artificial delay
+  const [loading, setLoading] = useState(false); //  Start as false, no artificial delay
 
-  // ✅ FIXED: Only show skeleton if images are genuinely loading
+  //  Only show skeleton if images are genuinely loading
   useEffect(() => {
     // If you need to fetch carousel data from an API, do it here
     // For now, images are defined statically so no loading needed

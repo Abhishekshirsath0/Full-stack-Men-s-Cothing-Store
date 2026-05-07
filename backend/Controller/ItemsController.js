@@ -10,7 +10,7 @@ export const postAddItems = async (req, res) => {
       Category,
       Description,
       Size,
-      Images, // 👈 added
+      Images,
     } = req.body;
 
     const newProduct = new Product({
@@ -21,7 +21,7 @@ export const postAddItems = async (req, res) => {
       Category,
       Description,
       Size,
-      Images, // 👈 added
+      Images, 
     });
 
     const savedProduct = await newProduct.save();
@@ -63,13 +63,13 @@ export const updateItem = async (req, res) => {
       Category,
       Description,
       Size,
-      Images, // 👈 added
+      Images, 
     } = req.body;
 
     const updatedProduct = await Product.findByIdAndUpdate(
       _id,
-      { ProductName, Brand, Price, Discount, Category, Description, Size, Images }, // 👈 added
-      { returnDocument: "after" } // 👈 replaces { new: true }
+      { ProductName, Brand, Price, Discount, Category, Description, Size, Images }, 
+      { returnDocument: "after" } //  
     );
 
     if (!updatedProduct) {

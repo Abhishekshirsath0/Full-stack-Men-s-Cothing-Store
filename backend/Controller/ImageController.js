@@ -6,8 +6,8 @@ const uploadOnCloudinary = async (localFilePath ) => {
     const result = await cloudinary.uploader.upload(localFilePath, {  
       resource_type: "image",
     });
-    fs.unlinkSync(localFilePath); // delete local file after upload
-    return result; // this contains the URL and other info about the uploaded image
+    fs.unlinkSync(localFilePath);  // delete local file after upload
+    return result;                 // this contains the URL and other info about the uploaded image
   } catch (error) {
     fs.unlinkSync(localFilePath);  // delete even on failure
     throw error;

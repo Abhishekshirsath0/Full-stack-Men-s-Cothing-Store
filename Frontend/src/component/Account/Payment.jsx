@@ -24,7 +24,7 @@ const Payment = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // In a real app, you’d call your payment API here
+   
     alert("Payment details submitted!");
   };
 
@@ -58,7 +58,7 @@ const Payment = () => {
           </label>
         </div>
 
-        {/* Card fields (shown only if card selected) */}
+        {/* Card fields  */}
         {paymentMethod === "card" && (
           <div className="space-y-3 rounded-md bg-gray-50 p-4">
             <div>
@@ -119,7 +119,7 @@ const Payment = () => {
           </div>
         )}
 
-        {/* UPI field (shown only if UPI selected) */}
+        {/* UPI field */}
         {paymentMethod === "upi" && (
           <div>
             <label className="mb-1 block text-sm font-medium text-gray-600">
