@@ -4,9 +4,7 @@ import bcrypt from "bcrypt";
 import dotenv from "dotenv";
 dotenv.config();
 
-// ─────────────────────────────────────────────
-// CREATE: Register new user
-// ─────────────────────────────────────────────
+
 export const postuserData = async (req, res) => {
   const { Firstname, Lastname, Address, Email, Phone, Password } = req.body;
 
