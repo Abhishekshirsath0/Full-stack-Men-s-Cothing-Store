@@ -9,12 +9,14 @@ const Login = () => {
   const [error, setError] = useState("");
   const [submitting, setSubmitting] = useState(false);
 
-  const emailRef = useRef();
-  const passwordRef = useRef();
+  const emailRef = useRef(null);
+  const passwordRef = useRef(null);
+
   const navigate = useNavigate();
 
+  // safer context handling
   const outletContext = useOutletContext();
-  const onLogin = outletContext?.onLogin;
+  const onLogin = outletContext?.onLogin || (() => {});
 
   useEffect(() => {
     const timer = setTimeout(() => setLoading(false), 250);
@@ -24,28 +26,39 @@ const Login = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError("");
+
+    const email = emailRef.current?.value?.trim();
+    const password = passwordRef.current?.value?.trim();
+
+    if (!email || !password) {
+      const msg = "Email and password are required";
+      setError(msg);
+      toast.error(msg);
+      return;
+    }
+
     setSubmitting(true);
 
     try {
       const result = await AuthenticateUser({
-        Email: emailRef.current.value,
-        Password: passwordRef.current.value,
+        Email: email,
+        Password: password,
       });
 
       if (result?.success) {
-        onLogin?.(result.user);
+        onLogin(result.user);
         toast.success("Login successful!");
 
-        navigate(
-          result.user.Usertype === "admin" ? "/dashboard" : "/"
-        );
+        const role = result?.user?.Usertype;
+
+        navigate(role === "admin" ? "/dashboard" : "/");
       } else {
-        const msg = result?.message || "Invalid email or password.";
+        const msg = result?.message || "Invalid credentials";
         setError(msg);
         toast.error(msg);
       }
-    } catch {
-      const msg = "Something went wrong. Please try again.";
+    } catch (err) {
+      const msg = "Server error. Try again later.";
       setError(msg);
       toast.error(msg);
     } finally {
@@ -64,7 +77,6 @@ const Login = () => {
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-50 px-4 relative">
 
-      {/* BACK BUTTON */}
       <button
         onClick={() => navigate("/")}
         className="absolute top-4 left-4 bg-black text-white px-4 py-2 rounded-lg hover:bg-gray-800 transition"
@@ -72,10 +84,10 @@ const Login = () => {
         ← Back
       </button>
 
-      <div className="w-full max-w-md rounded-lg border border-gray-200 bg-white p-8 shadow-sm">
+      <div className="w-full max-w-md rounded-lg border bg-white p-8 shadow-sm">
 
         <h1 className="mb-4 text-xl font-semibold text-gray-800">
-          Sign in to your account
+          Sign in
         </h1>
 
         {error && (
@@ -84,46 +96,44 @@ const Login = () => {
           </div>
         )}
 
-        <form className="mt-6 space-y-4" onSubmit={handleSubmit}>
+        <form onSubmit={handleSubmit} className="space-y-4">
 
           <div>
-            <label className="mb-1 block text-sm font-medium text-gray-700">
-              Email address
+            <label className="block text-sm font-medium text-gray-700">
+              Email
             </label>
             <input
               ref={emailRef}
               type="email"
-              placeholder="Enter your email (example: user@gmail.com)"
-              required
-              className="w-full rounded-md border px-3 py-2 text-sm outline-none focus:border-blue-500"
+              placeholder="Enter email"
+              className="w-full border px-3 py-2 rounded-md focus:outline-none focus:border-blue-500"
             />
           </div>
 
           <div>
-            <label className="mb-1 block text-sm font-medium text-gray-700">
+            <label className="block text-sm font-medium text-gray-700">
               Password
             </label>
             <input
               ref={passwordRef}
               type="password"
-              placeholder="Enter your password"
-              required
-              className="w-full rounded-md border px-3 py-2 text-sm outline-none focus:border-blue-500"
+              placeholder="Enter password"
+              className="w-full border px-3 py-2 rounded-md focus:outline-none focus:border-blue-500"
             />
           </div>
 
           <button
             type="submit"
             disabled={submitting}
-            className="w-full bg-blue-600 text-white py-2 rounded-md disabled:opacity-50 hover:bg-blue-700 transition"
+            className="w-full bg-blue-600 text-white py-2 rounded-md disabled:opacity-50"
           >
-            {submitting ? "Signing in…" : "Sign in"}
+            {submitting ? "Signing in..." : "Sign in"}
           </button>
 
-          <p className="text-center text-sm mt-4">
+          <p className="text-center text-sm mt-3">
             Don't have an account?{" "}
             <Link to="/register" className="text-blue-600">
-              Create account
+              Register
             </Link>
           </p>
 
