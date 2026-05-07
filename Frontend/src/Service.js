@@ -1,7 +1,5 @@
 
-const API = "https://full-stack-men-s-cothing-store-2.onrender.com
-
-";
+const API = "https://full-stack-men-s-cothing-store-2.onrender.com";
 
 /** Auth header from localStorage token */
 const authHeader = () => {
