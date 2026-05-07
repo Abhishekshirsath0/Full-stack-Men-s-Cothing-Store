@@ -11,7 +11,7 @@ const FilterSidebar = lazy(() => import("./component/CategoryFilter"));
 const Login = lazy(() => import("./component/Login.jsx"));
 const MyCart = lazy(() => import("./component/MyCart.jsx"));
 const About = lazy(() => import("./component/About.jsx"));
-const Contact = lazy(() => import("./component/contact.jsx"));
+const Contact = lazy(() => import("./component/Contact.jsx"));
 const Settings = lazy(() => import("./component/Account/settings.jsx"));
 const Account = lazy(() => import("./component/Account/Account.jsx"));
 const UserInfo = lazy(() => import("./component/Account/UserInfo.jsx"));
