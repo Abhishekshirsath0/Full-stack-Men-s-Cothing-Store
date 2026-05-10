@@ -143,6 +143,7 @@ export const loginUser = async (req, res) => {
       process.env.JWT_SECRET,
       { expiresIn: "2d" }
     );
+    
 
     res.cookie("token", token, {
       httpOnly: true,
@@ -150,6 +151,7 @@ export const loginUser = async (req, res) => {
       sameSite: process.env.NODE_ENV === "production" ? "none" : "strict",
       maxAge: 2 * 24 * 60 * 60 * 1000,
     });
+    
 
     const { Password: _, ...userData } = user._doc;
     return res.status(200).json({ success: true, user: userData, token });
