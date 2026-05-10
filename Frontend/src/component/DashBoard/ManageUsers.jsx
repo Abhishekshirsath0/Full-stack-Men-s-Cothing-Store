@@ -12,6 +12,8 @@ const ManageUsers = () => {
   const [selectedRoles, setSelectedRoles] = useState({});
   const [updatingId, setUpdatingId] = useState(null);
   const [deletingId, setDeletingId] = useState(null);
+  // FIX: track inline errors per card instead of one global error
+  const [inlineErrors, setInlineErrors] = useState({});
 
   useEffect(() => {
     fetchUsers();
@@ -22,6 +24,15 @@ const ManageUsers = () => {
       setLoading(true);
       setError("");
       const data = await GetDataFromServer();
+
+      // FIX: if server returned empty array AND we have a token, likely a 401/403
+      if (data.length === 0) {
+        const token = localStorage.getItem("token");
+        if (!token) {
+          setError("You are not logged in. Please log in as admin to manage users.");
+        }
+      }
+
       setUsers(data);
     } catch {
       setError("Failed to load users. Are you logged in as admin?");
@@ -32,6 +43,12 @@ const ManageUsers = () => {
 
   const handleRoleSelect = (id, role) => {
     setSelectedRoles((prev) => ({ ...prev, [id]: role }));
+    // Clear any inline error for this card when user interacts
+    setInlineErrors((prev) => {
+      const next = { ...prev };
+      delete next[id];
+      return next;
+    });
   };
 
   const handleApply = async (id) => {
@@ -45,20 +62,19 @@ const ManageUsers = () => {
       setUsers((prev) =>
         prev.map((u) => (u._id === id ? { ...u, Usertype: role } : u))
       );
-      // Clear the pending selection after successful update
       setSelectedRoles((prev) => {
         const next = { ...prev };
         delete next[id];
         return next;
       });
     } else {
-      setError("Failed to update role. Please try again.");
+      // FIX: show error inline on the affected card, not globally
+      setInlineErrors((prev) => ({ ...prev, [id]: "Failed to update role. Try again." }));
     }
 
     setUpdatingId(null);
   };
 
-  // FIX: wired up delete with confirmation
   const handleDelete = async (id) => {
     if (!window.confirm("Are you sure you want to delete this user?")) return;
 
@@ -68,13 +84,15 @@ const ManageUsers = () => {
     if (success) {
       setUsers((prev) => prev.filter((u) => u._id !== id));
     } else {
-      setError("Failed to delete user. Please try again.");
+      // FIX: inline error on the affected card
+      setInlineErrors((prev) => ({ ...prev, [id]: "Failed to delete user. Try again." }));
     }
 
     setDeletingId(null);
   };
 
-  const initials = (f, l) => (f?.[0] || "").toUpperCase() + (l?.[0] || "").toUpperCase();
+  const initials = (f, l) =>
+    (f?.[0] || "").toUpperCase() + (l?.[0] || "").toUpperCase();
 
   if (loading) {
     return (
@@ -88,10 +106,14 @@ const ManageUsers = () => {
     <div className="min-h-screen bg-gray-100 p-6">
       <h1 className="text-4xl font-bold mb-8 text-gray-800">User Management</h1>
 
+      {/* Global error (e.g. not logged in) */}
       {error && (
         <div className="mb-4 bg-red-100 text-red-600 p-3 rounded-lg shadow flex justify-between items-center">
           <span>{error}</span>
-          <button onClick={() => setError("")} className="text-red-400 hover:text-red-600 text-lg font-bold">
+          <button
+            onClick={() => setError("")}
+            className="text-red-400 hover:text-red-600 text-lg font-bold"
+          >
             ×
           </button>
         </div>
@@ -100,9 +122,11 @@ const ManageUsers = () => {
       <div className="flex flex-col gap-6">
         {users.map((user) => {
           const pendingRole = selectedRoles[user._id];
-          const displayRole = pendingRole ?? user.Usertype;
-          const changed = pendingRole && pendingRole !== user.Usertype;
-          const isAdmin = user.Usertype === "admin";
+          // FIX: normalise Usertype to lowercase before any comparison
+          const currentRole = user.Usertype?.toLowerCase();
+          const displayRole = pendingRole ?? currentRole;
+          const changed = pendingRole && pendingRole !== currentRole;
+          const isAdmin = currentRole === "admin";
 
           return (
             <div
@@ -130,7 +154,7 @@ const ManageUsers = () => {
                       className={`px-3 py-1 text-xs font-semibold rounded-full
                         ${isAdmin ? "bg-sky-200 text-sky-700" : "bg-orange-200 text-orange-700"}`}
                     >
-                      {user.Usertype.toUpperCase()}
+                      {currentRole.toUpperCase()}
                     </span>
                   </div>
 
@@ -153,6 +177,25 @@ const ManageUsers = () => {
                       <p className="text-gray-800">{user.Address}</p>
                     </div>
                   </div>
+
+                  {/* FIX: inline error for this specific card */}
+                  {inlineErrors[user._id] && (
+                    <div className="text-sm text-red-600 bg-red-50 border border-red-200 rounded-lg px-3 py-2 flex justify-between items-center">
+                      <span>{inlineErrors[user._id]}</span>
+                      <button
+                        onClick={() =>
+                          setInlineErrors((prev) => {
+                            const next = { ...prev };
+                            delete next[user._id];
+                            return next;
+                          })
+                        }
+                        className="text-red-400 hover:text-red-600 font-bold ml-2"
+                      >
+                        ×
+                      </button>
+                    </div>
+                  )}
 
                   {/* Role selector + actions */}
                   <div className="flex items-center justify-between pt-4 border-t flex-wrap gap-3">
@@ -206,7 +249,7 @@ const ManageUsers = () => {
         })}
       </div>
 
-      {!loading && users.length === 0 && (
+      {!loading && users.length === 0 && !error && (
         <p className="text-center mt-10 text-gray-500">No users found.</p>
       )}
     </div>
