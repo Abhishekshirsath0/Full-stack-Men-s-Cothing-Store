@@ -15,19 +15,19 @@ function App() {
 
   const [user, setUser] = useState(null);
 
-  // ✅ load user from localStorage once
+  //  load user from localStorage once
   useEffect(() => {
     const stored = localStorage.getItem("user");
     if (stored) setUser(JSON.parse(stored));
   }, []);
 
-  // ✅ LOGIN
+  //  LOGIN
   const handleLogin = (userData) => {
     localStorage.setItem("user", JSON.stringify(userData));
     setUser(userData);
   };
 
-  // ✅ LOGOUT (FIXED)
+  // LOGOUT (FIXED)
   const handleLogout = () => {
     localStorage.removeItem("user");
     localStorage.removeItem("token");
