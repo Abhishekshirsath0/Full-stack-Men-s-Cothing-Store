@@ -7,12 +7,12 @@ const Navbar = ({ user, onLogout }) => {
 
   const dropdownRef = useRef(null);
 
-  // ✅ FIX: fallback to localStorage if user prop is missing
+  //  fallback to localStorage if user prop is missing
   const storedUser = JSON.parse(localStorage.getItem("user"));
 
   const currentUser = user || storedUser;
 
-  // ✅ SAFE ADMIN CHECK (handles "admin", "ADMIN ", etc.)
+  // SAFE ADMIN CHECK (handles "admin", "ADMIN ", etc.)
   const isAdmin =
     currentUser?.Usertype?.toString().trim().toLowerCase() === "admin";
 
@@ -43,7 +43,7 @@ const Navbar = ({ user, onLogout }) => {
             </button>
           </Link>
 
-          {/* ✅ DASHBOARD ONLY FOR ADMIN */}
+          {/* DASHBOARD ONLY FOR ADMIN */}
           {isAdmin && (
             <Link to="/dashboard">
               <button className="p-2 border rounded hover:bg-gray-950 hover:text-white">
