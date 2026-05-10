@@ -6,7 +6,7 @@ const authHeader = () => {
   return token ? { Authorization: `Bearer ${token}` } : {};
 };
 
-/** Safe array handler */
+
 const safeArray = (data) => (Array.isArray(data) ? data : []);
 
 
@@ -35,9 +35,9 @@ const mapProduct = (product) => ({
   updatedAt: product?.updatedAt,
 });
 
-// ─────────────────────────────
+
 // AUTH
-// ─────────────────────────────
+
 
 export const AuthenticateUser = async ({ Email, Password }) => {
   try {
@@ -71,9 +71,9 @@ export const LogoutUser = () => {
   localStorage.removeItem("user");
 };
 
-// ─────────────────────────────
+
 // USERS
-// ─────────────────────────────
+
 
 export const AddDataToServer = async (data) => {
   const response = await fetch(`${API}/api/user`, {
@@ -104,11 +104,11 @@ export const GetDataFromServer = async () => {
       headers: {
         ...authHeader(),
       },
-      // FIX: send cookies alongside the Bearer token so both auth paths work
+      // end cookies alongside the Bearer token so both auth paths work
       credentials: "include",
     });
 
-    // FIX: log status so you can see 401/403 instead of silent empty array
+    //  log status so you can see 401/403 instead of silent empty array
     if (!response.ok) {
       const err = await response.json().catch(() => ({}));
       console.error(`GetDataFromServer: server responded ${response.status}`, err.message || "");
@@ -165,9 +165,7 @@ export const UpdateUserRoleOnServer = async (_id, role) => {
   }
 };
 
-// ─────────────────────────────
 // PRODUCTS
-// ─────────────────────────────
 
 export const AddProductToServer = async (productData) => {
   try {
@@ -254,12 +252,12 @@ export const UpdateProductToServer = async (_id, updatedProduct) => {
   }
 };
 
-// ─────────────────────────────
+
 // IMAGE UPLOAD
-// ─────────────────────────────
+
 
 export const UploadImagesToServer = async (imageFiles) => {
-  // FIX: upload in parallel but collect results individually
+  // upload in parallel but collect results individually
   // so a single failure doesn't wipe out all successful uploads
   const results = await Promise.allSettled(
     imageFiles.map(async (file) => {
