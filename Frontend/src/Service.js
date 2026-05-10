@@ -9,9 +9,7 @@ const authHeader = () => {
 /** Safe array handler */
 const safeArray = (data) => (Array.isArray(data) ? data : []);
 
-// ─────────────────────────────
-// MAPS
-// ─────────────────────────────
+
 
 const mapUser = (user) => ({
   _id: user?._id,
